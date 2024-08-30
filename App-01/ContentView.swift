@@ -7,10 +7,12 @@
 
 import SwiftUI
 
-struct ScheduleView1: View {
+struct ScheduleView: View {
     
     @Environment(Student.self) private var student
     @Environment(Courses.self) private var courses
+    @State var showEditView: Bool = false
+    @State private var showMenu = false
     
     var body: some View {
         NavigationStack {
@@ -33,6 +35,8 @@ struct ScheduleView1: View {
                         .padding(.top, 20)
                         .listStyle(.inset)
                     }
+                NavigationMenu(isShowing: $showMenu)
+                
             }
 //            .ignoresSafeArea()
             .navigationTitle(student.name)
@@ -46,6 +50,14 @@ struct ScheduleView1: View {
                             .foregroundStyle(Color.blue)
                     }
                 }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(action: {
+                        showMenu.toggle()
+                    }, label: {
+                        Image(systemName: "line.3.horizontal")
+                    })
+                    .foregroundColor(.blue)
+                }
             }
             .navigationDestination(for: Student.self) { student in
                 EditStudentView(student: student)
@@ -58,7 +70,7 @@ struct ScheduleView1: View {
 }
 
 #Preview {
-    ScheduleView1()
+    ScheduleView()
         .environment(Student.defaultValue)
         .environment(Courses())
 }
